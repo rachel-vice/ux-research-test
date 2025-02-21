@@ -43,10 +43,6 @@ workflows:
   test-build:
     jobs:
       - test:
-          filters:
-            branches:
-              only:
-                - main
       - build:
           requires:
             - test
