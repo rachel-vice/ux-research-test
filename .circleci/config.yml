@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.3.1
+
 jobs:
   test:
     working_directory: ~/repo
@@ -42,15 +45,7 @@ jobs:
 workflows:
   test-build:
     jobs:
-      - test:
-          filters:
-            branches:
-              only:
-                - main
+      - test
       - build:
           requires:
             - test
-          filters:
-            branches:
-              only:
-                - main
