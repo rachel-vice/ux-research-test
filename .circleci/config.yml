@@ -1,54 +1,18 @@
 version: 2.1
-
-orbs:
-  slack: circleci/slack@4.3.1
-
 jobs:
   job_1:
-    working_directory: ~/repo
     docker:
-      - image: cimg/node:18.16.0
+      - image: cimg/python:3.8
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: Install Dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
+          name: Install dependencies
+          command: pip install -r requirements.txt
       - run:
-          name: Test React App
-          command: npm run test
-      - store_test_results:
-          path: test_results
-      - run:
-          name: Force Failure
-          command: exit 1
-
-  job_2:
-    working_directory: ~/repo
-    docker:
-      - image: cimg/node:18.16.0
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run:
-          name: Build React App
-          command: |
-            npm run build
-      - save_cache:
-          key: app-build-cache-{{ .Branch }}
-          paths:
-            - ./build
-
+          name: Run tests
+          command: pytest
 workflows:
-  test-build:
+  version: 2
+  test:
     jobs:
       - job_1
-      - job_2:
-          requires:
-            - job_1
