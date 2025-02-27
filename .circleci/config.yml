@@ -49,6 +49,4 @@ workflows:
   test-build:
     jobs:
       - job_1
-      - job_2:
-          requires:
-            - job_1
+      - job_2
